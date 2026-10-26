@@ -544,6 +544,7 @@
   const ThemeManager = {
     currentTheme: 'dark',
     wallpapers: {
+      photo: 'var(--wp-photo)',
       sonoma: 'var(--wp-sonoma)',
       sequoia: 'var(--wp-sequoia)',
       aurora: 'var(--wp-aurora)'
@@ -560,21 +561,23 @@
       } catch (e) { }
       this.setTheme(initialTheme);
 
-      // Check saved wallpaper preference
-      let initialWp = 'sonoma';
+      // Check saved wallpaper preference or default to custom photo wallpaper
+      let initialWp = 'photo';
       try {
         const savedWp = localStorage.getItem('prajwal_portfolio_wallpaper');
-        if (savedWp && this.wallpapers[savedWp]) {
+        if (savedWp && this.wallpapers[savedWp] && savedWp !== 'sonoma') {
           initialWp = savedWp;
         }
       } catch (e) { }
       this.setWallpaper(initialWp, false);
 
       // Setup wallpaper click handlers from menu & context menu
+      document.getElementById('menu-wp-photo')?.addEventListener('click', () => this.setWallpaper('photo'));
       document.getElementById('menu-wp-sonoma')?.addEventListener('click', () => this.setWallpaper('sonoma'));
       document.getElementById('menu-wp-sequoia')?.addEventListener('click', () => this.setWallpaper('sequoia'));
       document.getElementById('menu-wp-aurora')?.addEventListener('click', () => this.setWallpaper('aurora'));
 
+      document.getElementById('ctx-wp-photo')?.addEventListener('click', () => this.setWallpaper('photo'));
       document.getElementById('ctx-wp-sonoma')?.addEventListener('click', () => this.setWallpaper('sonoma'));
       document.getElementById('ctx-wp-sequoia')?.addEventListener('click', () => this.setWallpaper('sequoia'));
       document.getElementById('ctx-wp-aurora')?.addEventListener('click', () => this.setWallpaper('aurora'));
@@ -613,7 +616,7 @@
     },
 
     setWallpaper(key, playSound = true) {
-      const wpValue = this.wallpapers[key] || this.wallpapers.sonoma;
+      const wpValue = this.wallpapers[key] || this.wallpapers.photo;
       document.documentElement.style.setProperty('--active-wallpaper', wpValue);
       try {
         localStorage.setItem('prajwal_portfolio_wallpaper', key);
@@ -2184,6 +2187,7 @@ Available shell commands:
   <span style="color:#38bdf8; font-weight:600;">contact</span>     - Print email, LinkedIn, GitHub &amp; phone
   <span style="color:#38bdf8; font-weight:600;">open &lt;app&gt;</span>   - Launch a macOS app (finder, safari, projects, etc.)
   <span style="color:#38bdf8; font-weight:600;">theme</span>       - Toggle between Light and Dark mode
+  <span style="color:#38bdf8; font-weight:600;">wallpaper &lt;name&gt;</span> - Set desktop wallpaper (photo, sonoma, sequoia, aurora)
   <span style="color:#38bdf8; font-weight:600;">whoami</span>      - Display current user identity
   <span style="color:#38bdf8; font-weight:600;">date</span>        - Print current system date &amp; time
   <span style="color:#38bdf8; font-weight:600;">ls</span>          - List simulated workspace files
@@ -2303,6 +2307,17 @@ Location: Kolhapur, Maharashtra | Dates: Jun 2025 – Sep 2025
                 resultLine.textContent = savedNotes;
               } else {
                 resultLine.textContent = `cat: ${file}: simulated file view. Try 'open ${file}' or 'help'.`;
+              }
+            } else if (cleanCommand.startsWith('wallpaper')) {
+              const arg = cleanCommand.replace(/^wallpaper\s*/, '').trim();
+              const validWps = ['photo', 'sonoma', 'sequoia', 'aurora'];
+              const resultLine = document.createElement('div');
+              resultLine.className = 'terminal-line';
+              if (validWps.includes(arg)) {
+                ThemeManager.setWallpaper(arg);
+                resultLine.innerHTML = `<span style="color:#4ade80;">Wallpaper changed to ${arg}.</span>`;
+              } else {
+                resultLine.innerHTML = `<span style="color:#f59e0b;">Usage: wallpaper [photo | sonoma | sequoia | aurora] (Current: ${localStorage.getItem('prajwal_portfolio_wallpaper') || 'photo'})</span>`;
               }
               terminalLogs.appendChild(resultLine);
             } else if (commands[cleanCommand]) {
