@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="pGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a84ff"/>
+      <stop offset="50%" stop-color="#5e5ce6"/>
+      <stop offset="100%" stop-color="#ff375f"/>
+    </linearGradient>
+  </defs>
+  <!-- macOS style squircle background -->
+  <rect x="4" y="4" width="92" height="92" rx="22" fill="#1c1c1e"/>
+  <rect x="4" y="4" width="92" height="92" rx="22" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <!-- Modern Geometric "P" Monogram -->
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M28 20 C28 17.8 29.8 16 32 16 L56 16 C71.5 16 82 25 82 37.5 C82 50 71.5 59 56 59 L40 59 L40 80 C40 82.2 38.2 84 36 84 C33.8 84 32 82.2 32 80 L32 20 Z M40 26 L55 26 C65 26 71.5 31 71.5 37.5 C71.5 44 65 49 55 49 L40 49 Z" fill="url(#pGrad)"/>
+</svg>
